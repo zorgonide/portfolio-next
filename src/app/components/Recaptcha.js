@@ -15,7 +15,7 @@ export default function Recaptcha({ ref, sitekey, className }) {
 
     const render = () => {
       if (widgetIdRef.current !== null || !containerRef.current) return;
-      widgetIdRef.current = grecaptcha.render(containerRef.current, { sitekey });
+      widgetIdRef.current = grecaptcha.render(containerRef.current, { sitekey, theme: 'dark' });
     };
 
     // grecaptcha.ready defers until the widget API is fully initialised.

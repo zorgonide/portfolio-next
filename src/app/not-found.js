@@ -1,35 +1,22 @@
 import Link from 'next/link';
 
-const pageStyles = {
-  color: '#232129',
-  padding: '96px',
-  fontFamily: '-apple-system, Roboto, sans-serif, serif',
-};
-
-const headingStyles = {
-  marginTop: 0,
-  marginBottom: 64,
-  maxWidth: 320,
-};
-
-const paragraphStyles = {
-  marginBottom: 48,
-};
-
 export const metadata = {
-  title: 'Not found',
+  title: 'Not found | Ammar Khurshid',
 };
 
 export default function NotFound() {
   return (
-    <main style={pageStyles}>
-      <h1 style={headingStyles}>Page not found</h1>
-      <p style={paragraphStyles}>
-        Sorry 😔, we couldn&rsquo;t find what you were looking for.
-        <br />
-        <br />
-        <Link href='/'>Go home</Link>.
-      </p>
+    <main className='notfound'>
+      <div className='container'>
+        <p className='eyebrow'>Error 404</p>
+        <h1 className='hero-title'>
+          Page <span className='gradient-text'>not found</span>
+        </h1>
+        <p className='hero-copy'>Sorry 😔, this one wandered off into Mordor. Let&rsquo;s get you back on the path.</p>
+        <Link href='/' className='btn btn-primary'>
+          Go home
+        </Link>
+      </div>
     </main>
   );
 }
