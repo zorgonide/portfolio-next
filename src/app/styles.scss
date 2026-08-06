@@ -803,6 +803,12 @@ img {
 .captcha {
     display: flex;
     justify-content: center;
+
+    // clip the 1px white border the reCAPTCHA iframe renders around the dark widget
+    & > div {
+        border-radius: 4px;
+        overflow: hidden;
+    }
 }
 
 .form-status {
