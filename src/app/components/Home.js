@@ -34,9 +34,9 @@ const SOCIALS = [
 ];
 
 const STATS = [
-  { value: '5+', label: 'Years coding' },
+  { value: '4+', label: 'Years corporate coding' },
   { value: '4', label: 'Companies' },
-  { value: 'MSc', label: 'Distinction' },
+  { value: 'MSc CS', label: 'Distinction' },
 ];
 
 const ABOUT_TAGS = ['React', 'Next.js', 'TypeScript', 'Adobe Analytics', 'UI/UX', 'Node.js'];
@@ -46,7 +46,7 @@ const Projects = [
     title: 'MovieFlix 🎥',
     description: 'Built out of a need to stop endless scrolling through Netflix. Log in and get customized movie recommendations, and leave reviews.',
     image: '/images/movieflix.png',
-    link: 'https://movieflix-tv.netlify.app/',
+    link: 'https://movieflix-next-delta.vercel.app/',
   },
   {
     title: 'Travelo 🚲',
@@ -55,13 +55,13 @@ const Projects = [
     image: '/images/travelo.png',
     link: 'https://github.com/zorgonide/travelo-travel-app',
   },
-  {
-    title: 'Emokey 🔒',
-    description:
-      "An alternative to conventional password authentication using emojis. Every password is uniquely hashed to 3 emojis, and the user's input is obfuscated into emojis. Built for Human Centered Security at the University of Glasgow (A grade).",
-    image: '/images/emokey.png',
-    link: 'https://emokey2.netlify.app/',
-  },
+  // {
+  //   title: 'Emokey 🔒',
+  //   description:
+  //     "An alternative to conventional password authentication using emojis. Every password is uniquely hashed to 3 emojis, and the user's input is obfuscated into emojis. Built for Human Centered Security at the University of Glasgow (A grade).",
+  //   image: '/images/emokey.png',
+  //   link: 'https://emokey2.netlify.app/',
+  // },
   {
     title: 'Four-wheeled bot 🏎',
     description:
@@ -487,7 +487,7 @@ export default function Home() {
 
       <footer className='footer'>
         <div className='container'>
-          <p>© {year} Ammar Khurshid — built with Next.js</p>
+          <p>© {year} Ammar Khurshid</p>
           <ul className='social'>
             {SOCIALS.map(({ label, href, Icon }) => (
               <li key={label}>
