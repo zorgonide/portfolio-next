@@ -261,12 +261,28 @@ img {
     display: flex;
     align-items: center;
     border-bottom: 1px solid transparent;
-    transition: background 0.35s var(--ease), border-color 0.35s var(--ease);
+    transition: border-color 0.35s var(--ease);
 
-    &.is-stuck {
+    // Frosted background lives on a pseudo-element instead of `.nav` itself — a backdrop-filter
+    // on `.nav` would make it a containing block for its fixed-position `.nav-links` child,
+    // confining the mobile menu overlay to the navbar's box instead of the full viewport.
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
         background: rgba(7, 8, 13, 0.72);
         backdrop-filter: blur(16px) saturate(160%);
+        opacity: 0;
+        transition: opacity 0.35s var(--ease);
+    }
+
+    &.is-stuck {
         border-bottom-color: var(--border);
+
+        &::before {
+            opacity: 1;
+        }
     }
 
     .container {
