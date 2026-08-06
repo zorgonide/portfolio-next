@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Recaptcha from './Recaptcha';
+import { RECAPTCHA_SITE_KEY, FORM_ENDPOINT } from './formConfig';
 import {
   IconArrowDown,
   IconArrowUpRight,
@@ -14,9 +15,6 @@ import {
   IconMail,
   IconMenu,
 } from './Icons';
-
-const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
-const FORM_ENDPOINT = 'https://getform.io/f/73ebbb0e-851d-4921-ae48-e8f5b4b64f56';
 
 const NAV_ITEMS = [
   { id: 'about', label: 'About' },
