@@ -298,7 +298,7 @@ export default function Home() {
 
   return (
     <>
-      <nav className={`nav ${isStuck ? 'is-stuck' : ''}`}>
+      <nav className={`nav ${isStuck ? 'is-stuck' : ''}`} aria-label='Main navigation'>
         <div className='container'>
           <a className='nav-logo' href='#top'>
             ammarkhurshid<span>.com</span>
