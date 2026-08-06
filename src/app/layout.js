@@ -1,30 +1,42 @@
-import { Lato } from "next/font/google";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "font-awesome/css/font-awesome.min.css";
+import { Inter, JetBrains_Mono, Outfit } from "next/font/google";
 import "./styles.scss";
 import "./experience.scss";
-import BootstrapClient from "./components/BootstrapClient";
 
-const lato = Lato({
-  variable: "--font-lato",
+const inter = Inter({
+  variable: "--font-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "700", "900"],
+  display: "swap",
+});
+
+const outfit = Outfit({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  weight: ["400", "700"],
   display: "swap",
 });
 
 export const metadata = {
   metadataBase: new URL("https://www.ammarkhurshid.com"),
   title: "Ammar Khurshid | Portfolio",
-  description: "The portfolio of Ammar Khurshid, a developer.",
+  description: "The portfolio of Ammar Khurshid, a fullstack web developer building with React and Next.js.",
+};
+
+export const viewport = {
+  colorScheme: "dark",
+  themeColor: "#07080d",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={lato.variable}>
-      <body>
-        {children}
-        <BootstrapClient />
-      </body>
+    <html lang="en" className={`${inter.variable} ${outfit.variable} ${jetbrainsMono.variable}`}>
+      <body>{children}</body>
     </html>
   );
 }

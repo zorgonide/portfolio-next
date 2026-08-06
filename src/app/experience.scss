@@ -1,197 +1,120 @@
-//== Fonts size
-$font-size-base: 1rem; // Font size base - 16px
-$font-size-body: 1.2rem; // Font size body - 20px
+/*
+    Experience timeline — vertical rail with glass cards.
+*/
 
-//== Font weight
-$font-weight-regular: 400;
-$font-weight-semibold: 600;
-$line-height-base: 1.5 * 1rem; // Default Line height base 24px
-$line-height-body: 2 * 1rem; // Default Line height body 32px
-$line-hg-mob-meta: 1.5 * 1rem; // 24px // meta
-@mixin medium-screen {
-    @media screen and (max-width: 1024px) {
-        @content;
-    }
-}
-@mixin paragraph {
-    font-weight: 300;
-    text-align: center;
-    @include medium-screen {
-        font-size: $font-size-base;
-    }
-}
 .timeline {
-    h1 {
-        text-align: center;
-    }
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 40px;
 
-    ul {
-        --col-gap: 2rem;
-        --row-gap: 2rem;
-        --line-w: 0.25rem;
-        display: grid;
-        grid-template-columns: var(--line-w) 1fr;
-        grid-auto-columns: max-content;
-        column-gap: var(--col-gap);
-        list-style: none;
-        width: min(60rem, 90%);
-        margin-inline: auto;
-        @include medium-screen() {
-            width: 100%;
-        }
-    }
-
-    /* line */
-    ul::before {
-        content: "";
-        grid-column: 1;
-        grid-row: 1 / span 20;
-        background: rgb(225, 225, 225);
-        border-radius: calc(var(--line-w) / 2);
-    }
-
-    /* columns*/
-
-    /* row gaps */
-    ul li:not(:last-child) {
-        margin-bottom: var(--row-gap);
-    }
-
-    /* card */
-    ul li {
-        grid-column: 2;
-        --inlineP: 1.5rem;
-        margin-inline: var(--inlineP);
-        grid-row: span 2;
-        display: grid;
-        grid-template-rows: min-content min-content min-content;
-    }
-
-    /* date */
-    ul li .date {
-        --dateH: 3rem;
-        height: var(--dateH);
-        margin-inline: calc(var(--inlineP) * -1);
-
-        text-align: left;
-        background-color: #288075;
-
-        color: white;
-        font-size: 1.25rem;
-        font-weight: 700;
-
-        display: grid;
-        place-content: center;
-        position: relative;
-
-        border-radius: calc(var(--dateH) / 2) 0 0 calc(var(--dateH) / 2);
-    }
-
-    /* date flap */
-    ul li .date::before {
-        content: "";
-        width: var(--inlineP);
-        aspect-ratio: 1;
-        background: #288075;
-        background-image: linear-gradient(rgba(0, 0, 0, 0.2) 100%, transparent);
-        position: absolute;
-        top: 100%;
-
-        clip-path: polygon(0 0, 100% 0, 0 100%);
-        right: 0;
-    }
-
-    /* circle */
-    ul li .date::after {
+    &::before {
         content: "";
         position: absolute;
-        width: 2rem;
-        aspect-ratio: 1;
-        background: var(--bgColor);
-        border: 0.3rem solid #288075;
+        top: 6px;
+        bottom: 0;
+        left: 7px;
+        width: 2px;
+        background: linear-gradient(to bottom, var(--accent), var(--accent-2) 45%, transparent);
+    }
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 28px;
+
+    &:last-child {
+        padding-bottom: 0;
+    }
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 30px;
+        left: -40px;
+        width: 16px;
+        height: 16px;
         border-radius: 50%;
-        top: 50%;
-
-        transform: translate(50%, -50%);
-        right: calc(100% + var(--col-gap) + var(--line-w) / 2);
+        background: var(--bg);
+        border: 2px solid var(--accent);
+        box-shadow: 0 0 0 5px rgba(45, 212, 191, 0.12);
+        transition: box-shadow 0.4s var(--ease), background 0.4s var(--ease);
     }
 
-    /* title descr */
-    ul li .title,
-    ul li .descr {
-        background: var(--bgColor);
-        position: relative;
-        padding-inline: 1.5rem;
+    &:hover::before {
+        background: var(--accent);
+        box-shadow: 0 0 0 8px rgba(45, 212, 191, 0.16);
     }
-    ul li .title {
-        overflow: hidden;
-        padding-block-start: 1.5rem;
-        font-weight: 500;
+}
+
+.timeline-card {
+    padding: 26px 28px;
+    display: grid;
+    gap: 10px;
+}
+
+.timeline-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.timeline-role {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.timeline-date {
+    font-family: var(--font-mono), monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    white-space: nowrap;
+}
+
+.timeline-company {
+    font-weight: 600;
+    color: var(--accent);
+}
+
+.tech-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        padding: 4px 11px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: var(--bg-elev);
+        font-size: 0.78rem;
+        color: var(--text-muted);
     }
-    ul li .descr {
-        @include paragraph;
-        text-align: center;
-        padding: 0;
-    }
+}
 
-    /* shadows */
-    ul li .title::before,
-    ul li .descr::before {
-        content: "";
-        position: absolute;
-        width: 90%;
-        height: 0.5rem;
-        background: rgba(0, 0, 0, 0.5);
-        left: 50%;
-        border-radius: 50%;
-        filter: blur(4px);
-        transform: translate(-50%, 50%);
-    }
-    ul li .title::before {
-        bottom: calc(100% + 0.125rem);
-    }
+@media (max-width: 640px) {
+    .timeline {
+        padding-left: 28px;
 
-    ul li .descr::before {
-        z-index: -1;
-        bottom: 0.25rem;
-    }
-
-    @media (min-width: 40rem) {
-        ul {
-            grid-template-columns: 1fr var(--line-w) 1fr;
-        }
-        ul::before {
-            grid-column: 2;
-        }
-        ul li:nth-child(odd) {
-            grid-column: 1;
-        }
-        ul li:nth-child(even) {
-            grid-column: 3;
-        }
-
-        /* start second card */
-        ul li:nth-child(2) {
-            grid-row: 2/4;
-        }
-
-        ul li:nth-child(odd) .date::before {
-            clip-path: polygon(0 0, 100% 0, 100% 100%);
-            left: 0;
-        }
-
-        ul li:nth-child(odd) .date::after {
-            transform: translate(-50%, -50%);
-            left: calc(100% + var(--col-gap) + var(--line-w) / 2);
-        }
-        ul li:nth-child(odd) .date {
-            border-radius: 0 calc(var(--dateH) / 2) calc(var(--dateH) / 2) 0;
+        &::before {
+            left: 5px;
         }
     }
 
-    .company {
-        font-weight: 700;
-        font-size: larger;
-        color: #288075;
+    .timeline-item::before {
+        left: -28px;
+        top: 26px;
+        width: 12px;
+        height: 12px;
+    }
+
+    .timeline-card {
+        padding: 22px;
     }
 }

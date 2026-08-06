@@ -1,11 +1,45 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Recaptcha from './Recaptcha';
+import {
+  IconArrowDown,
+  IconArrowUpRight,
+  IconClose,
+  IconDownload,
+  IconGithub,
+  IconInstagram,
+  IconLinkedin,
+  IconMail,
+  IconMenu,
+} from './Icons';
 
-const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? '6LfKJhUpAAAAAC91p3Iv45bDilAm0BdM1X9NHxq6';
+const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 const FORM_ENDPOINT = 'https://getform.io/f/73ebbb0e-851d-4921-ae48-e8f5b4b64f56';
+
+const NAV_ITEMS = [
+  { id: 'about', label: 'About' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'education', label: 'Education' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'contact', label: 'Contact' },
+];
+
+const SOCIALS = [
+  { label: 'GitHub', href: 'https://github.com/zorgonide', Icon: IconGithub },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/ammar-khurshid-757140177/', Icon: IconLinkedin },
+  { label: 'Instagram', href: 'https://www.instagram.com/ammar.khurshid/', Icon: IconInstagram },
+];
+
+const STATS = [
+  { value: '5+', label: 'Years coding' },
+  { value: '4', label: 'Companies' },
+  { value: 'MSc', label: 'Distinction' },
+];
+
+const ABOUT_TAGS = ['React', 'Next.js', 'TypeScript', 'Adobe Analytics', 'UI/UX', 'Node.js'];
 
 const Projects = [
   {
@@ -22,16 +56,16 @@ const Projects = [
     link: 'https://github.com/zorgonide/travelo-travel-app',
   },
   {
-    title: 'Emokey 🔒 - Reinventing passwords with emojis',
+    title: 'Emokey 🔒',
     description:
-      "Built an alternative method to conventional password authentication, using emojis instead. Every password text is uniquely hashed to 3 emojis, and the user's input is obfuscated into emojis. Built for Human Centered Security Course at University of Glasgow. (A grade)",
+      "An alternative to conventional password authentication using emojis. Every password is uniquely hashed to 3 emojis, and the user's input is obfuscated into emojis. Built for Human Centered Security at the University of Glasgow (A grade).",
     image: '/images/emokey.png',
     link: 'https://emokey2.netlify.app/',
   },
   {
-    title: 'Semi-autonomous four-wheeled bot 🏎',
+    title: 'Four-wheeled bot 🏎',
     description:
-      'Stream video from a bot using Raspberry Pi and camera to a host computer in master-slave configuration to perform obstacle detection and move the bot around using commands sent from the master computer',
+      'Streams video from a Raspberry Pi bot to a host computer in a master-slave configuration to perform obstacle detection and drive the bot with commands sent from the master.',
     image: '/images/bot.png',
     link: 'https://github.com/zorgonide/FourWheeledBot',
   },
@@ -40,19 +74,19 @@ const Projects = [
 const Education = [
   {
     university: 'University of Glasgow, Scotland',
-    time: '2022 - 2023',
+    time: '2022 — 2023',
     degree: 'MSc Computing Science',
     grade: 'Distinction',
   },
   {
     university: 'Manipal Institute of Technology, India',
-    time: '2017 - 2021',
+    time: '2017 — 2021',
     degree: 'BTech Information Technology',
     grade: '7.8/10 CGPA',
   },
   {
     university: 'Delhi Public School, Indirapuram, India',
-    time: '2011 - 2016',
+    time: '2011 — 2016',
     degree: 'High School, CBSE',
     grade: '87.4%',
   },
@@ -61,345 +95,410 @@ const Education = [
 const Experience = [
   {
     company: "Sainsbury's",
-    time: 'Aug 2024 - Present',
+    time: 'Aug 2024 — Present',
     role: 'Software Engineer',
-    description: "Product analytics across Sainsbury's, Argos, Habitat, TU Clothing.",
-    tech: 'React, Next.js, HTML, CSS, Javascript, Adobe Analytics',
+    description: "Product analytics across Sainsbury's, Argos, Habitat and TU Clothing.",
+    tech: ['React', 'Next.js', 'JavaScript', 'HTML', 'CSS', 'Adobe Analytics'],
   },
   {
     company: 'Reply',
-    time: 'Sep 2023 - Aug 2024',
+    time: 'Sep 2023 — Aug 2024',
     role: 'Consultant',
-    description: 'Analytics Developer working with Adobe Experience Cloud',
-    tech: 'Javascript, HTML, CSS, Adobe Analytics',
+    description: 'Analytics developer working with Adobe Experience Cloud.',
+    tech: ['JavaScript', 'HTML', 'CSS', 'Adobe Analytics'],
   },
   {
     company: 'Adobe',
-    time: 'Feb 2022 - Aug 2022',
+    time: 'Feb 2022 — Aug 2022',
     role: 'Senior Technical Product Consultant',
-    description: 'Facilitated clients in implementing, optimising, and troubleshooting web implementations for Adobe Analytics.',
-    tech: 'Javascript, HTML, CSS, SQL, Adobe Analytics',
+    description: 'Helped clients implement, optimise and troubleshoot web implementations for Adobe Analytics.',
+    tech: ['JavaScript', 'HTML', 'CSS', 'SQL', 'Adobe Analytics'],
   },
   {
     company: 'ICICI Lombard',
-    time: 'Feb 2021 - Feb 2022',
+    time: 'Feb 2021 — Feb 2022',
     role: 'Developer',
-    description: "Developed Angular web apps for health insurance for India's largest private insurer.",
-    tech: 'Angular, Typescript, HTML, CSS, Java, React',
+    description: "Built Angular web apps for health insurance at India's largest private insurer.",
+    tech: ['Angular', 'TypeScript', 'HTML', 'CSS', 'Java', 'React'],
   },
   {
     company: 'Viga Entertainment Studio',
-    time: 'Jul 2020 - Dec 2020',
+    time: 'Jul 2020 — Dec 2020',
     role: 'Frontend Intern',
-    description: 'Developed a React web app to serve as a repository for tracking sequences and shots in movie production.',
-    tech: '  React, Redux, HTML, CSS, Javascript, Firebase, UI/UX Design',
+    description: 'Developed a React web app to track sequences and shots in movie production.',
+    tech: ['React', 'Redux', 'JavaScript', 'Firebase', 'UI/UX Design'],
   },
 ];
+
+const SKILL_GROUPS = [
+  { title: 'Focus', items: ['Web Development', 'Adobe Analytics', 'UI/UX Design'] },
+  { title: 'Languages', items: ['JavaScript', 'TypeScript', 'Python', 'Java', 'HTML', 'CSS', 'SQL'] },
+  {
+    title: 'Technologies',
+    items: ['React', 'Next.js', 'React Native', 'Angular', 'Gatsby', 'Node.js', 'Express', 'Raspberry Pi', 'Postman', 'Figma', 'Material UI'],
+  },
+];
+
+function SectionHeading({ eyebrow, title, sub }) {
+  return (
+    <div className='section-head reveal'>
+      <p className='eyebrow'>{eyebrow}</p>
+      <h2 className='section-title'>{title}</h2>
+      {sub ? <p className='section-sub'>{sub}</p> : null}
+    </div>
+  );
+}
 
 function Project({ project }) {
   const { title, description, image, link } = project;
   return (
-    <div className='project shadow-large'>
-      <div className='project-image'>
-        <Image src={image} alt={title} height={180} width={300} />
+    <article className='project card reveal'>
+      <div className='project-media'>
+        <Image src={image} alt={title} fill sizes='(max-width: 768px) 100vw, 50vw' />
       </div>
-      <div className='project-info'>
+      <div className='project-body'>
         <h3>{title}</h3>
         <p>{description}</p>
-        <a target='_blank' rel='noopener noreferrer' href={link}>
-          View Project
+        <a className='project-link' target='_blank' rel='noopener noreferrer' href={link}>
+          View project <IconArrowUpRight />
         </a>
       </div>
-    </div>
+    </article>
   );
 }
 
-function Experiences() {
+function Timeline() {
   return (
-    <div className='timeline'>
-      <ul>
-        {Experience.map((experience, i) => (
-          <li key={i}>
-            <div className='date'>{experience.time}</div>
-            <div className='title'>{experience.role}</div>
-            <div className='company'>{experience.company}</div>
-            <div className='descr'>{experience.description}</div>
-            <div className='tech text-muted'>{experience.tech}</div>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-function EduBlock({ education }) {
-  const { university, time, degree, grade } = education;
-  return (
-    <div className='education-block'>
-      <h4 className='weight-bold'>{university}</h4>
-      <span className='education-date'>{time}</span>
-      <p className='italic'>{degree}</p>
-      <ul>
-        <li>{grade}</li>
-      </ul>
-    </div>
+    <ol className='timeline'>
+      {Experience.map((job) => (
+        <li className='timeline-item reveal' key={job.company}>
+          <div className='timeline-card card'>
+            <div className='timeline-top'>
+              <h3 className='timeline-role'>{job.role}</h3>
+              <span className='timeline-date'>{job.time}</span>
+            </div>
+            <p className='timeline-company'>{job.company}</p>
+            <p>{job.description}</p>
+            <ul className='tech-list'>
+              {job.tech.map((tech) => (
+                <li key={tech}>{tech}</li>
+              ))}
+            </ul>
+          </div>
+        </li>
+      ))}
+    </ol>
   );
 }
 
 export default function Home() {
-  const [copyright, setCopyright] = useState('');
-  const [isMenuActive, setMenuActive] = useState(false);
+  const [year, setYear] = useState('');
+  const [isMenuOpen, setMenuOpen] = useState(false);
+  const [isStuck, setStuck] = useState(false);
+  const [activeSection, setActiveSection] = useState('about');
+  const [status, setStatus] = useState('');
   const recaptcha = useRef(null);
 
-  const handleMenuOpen = () => {
-    setMenuActive(!isMenuActive);
-  };
-
-  const handleMenuClose = () => {
-    setMenuActive(!isMenuActive);
-  };
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
 
   const handleSubmission = (e) => {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
     const captchaValue = recaptcha.current?.getValue();
-    if (captchaValue) {
-      fetch(FORM_ENDPOINT, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          Accept: 'application/json',
-        },
-      })
-        .then(() => {
-          form.reset();
-          recaptcha.current?.reset();
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        })
-        .catch((error) => console.log(error));
+
+    if (RECAPTCHA_SITE_KEY && !captchaValue) {
+      setStatus('Please complete the captcha first.');
+      return;
     }
+
+    setStatus('Sending…');
+    fetch(FORM_ENDPOINT, {
+      method: 'POST',
+      body: formData,
+      headers: { Accept: 'application/json' },
+    })
+      .then(() => {
+        form.reset();
+        recaptcha.current?.reset();
+        setStatus('Thanks! Your message is on its way. 🚀');
+      })
+      .catch(() => setStatus('Something went wrong — try me on LinkedIn instead.'));
   };
 
   useEffect(() => {
     // Set on the client so static prerendering doesn't freeze the year at build time.
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setCopyright(`${new Date().getFullYear()} Ammar Khurshid`);
+    setYear(new Date().getFullYear());
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => setStuck(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    document.body.classList.toggle('nav-open', isMenuOpen);
+    return () => document.body.classList.remove('nav-open');
+  }, [isMenuOpen]);
+
+  useEffect(() => {
+    const spy = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) setActiveSection(visible.target.id);
+      },
+      { rootMargin: '-45% 0px -50% 0px', threshold: [0, 0.25, 0.5] }
+    );
+    NAV_ITEMS.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) spy.observe(el);
+    });
+
+    return () => spy.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const pending = new Set(document.querySelectorAll('.reveal'));
+
+    const reveal = new IntersectionObserver((entries) => entries.forEach((entry) => entry.isIntersecting && show(entry.target)), {
+      threshold: 0.12,
+    });
+
+    // A hash deep link jumps the page before the observer's first delivery, so sweep whatever is on screen.
+    const sweep = () => {
+      pending.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) show(el);
+      });
+    };
+
+    function show(el) {
+      el.classList.add('is-visible');
+      reveal.unobserve(el);
+      pending.delete(el);
+      if (pending.size === 0) stop();
+    }
+
+    function stop() {
+      reveal.disconnect();
+      window.removeEventListener('scroll', sweep);
+      window.removeEventListener('load', sweep);
+    }
+
+    pending.forEach((el) => reveal.observe(el));
+    window.addEventListener('scroll', sweep, { passive: true });
+    window.addEventListener('load', sweep);
+    sweep();
+
+    return stop;
   }, []);
 
   return (
-    <div>
-      <div id='mobile-menu-open' className={`shadow-large ${isMenuActive ? 'active' : ''}`} onClick={handleMenuOpen}>
-        <i className='fa fa-bars' aria-hidden='true'></i>
-      </div>
-      <header>
-        <div id='mobile-menu-close' className={isMenuActive ? 'active' : ''} onClick={handleMenuClose}>
-          <span>Close</span> <i className='fa fa-times' aria-hidden='true'></i>
+    <>
+      <nav className={`nav ${isStuck ? 'is-stuck' : ''}`}>
+        <div className='container'>
+          <a className='nav-logo' href='#top'>
+            ammarkhurshid<span>.com</span>
+          </a>
+          <ul className={`nav-links ${isMenuOpen ? 'open' : ''}`}>
+            {NAV_ITEMS.map(({ id, label }) => (
+              <li key={id}>
+                <a href={`#${id}`} className={activeSection === id ? 'active' : ''} onClick={closeMenu}>
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <button
+            type='button'
+            className='nav-toggle'
+            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isMenuOpen}
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            {isMenuOpen ? <IconClose /> : <IconMenu />}
+          </button>
         </div>
-        <ul id='menu' className='shadow'>
-          <li>
-            <a href='#about'>About</a>
-          </li>
-          <li>
-            <a href='#experience'>Experience</a>
-          </li>
-          <li>
-            <a href='#education'>Education</a>
-          </li>
-          <li>
-            <a href='#projects'>Projects</a>
-          </li>
-          <li>
-            <a href='#skills'>Skills</a>
-          </li>
-          <li>
-            <a href='#certificate'>Certifications</a>
-          </li>
-          <li>
-            <a href='#contact'>Contact</a>
-          </li>
-        </ul>
+      </nav>
+
+      <header className='hero' id='top'>
+        <div className='hero-grid' />
+        <div className='hero-orb one' />
+        <div className='hero-orb two' />
+        <div className='container hero-inner'>
+          <p className='hero-badge'>
+            <span className='status-dot' />
+            Open to interesting work
+          </p>
+          <h1 className='hero-title'>
+            Ammar <span className='gradient-text'>Khurshid</span>
+          </h1>
+          <p className='hero-role'>Fullstack web developer</p>
+          <p className='hero-copy'>
+            I build fast, accessible interfaces with React and Next.js — currently shipping product analytics experiences at Sainsbury&apos;s.
+          </p>
+          <div className='hero-actions'>
+            <a href='#contact' className='btn btn-primary'>
+              <IconMail /> Get in touch
+            </a>
+            <a href='/Ammar_Resume.pdf' className='btn btn-ghost'>
+              <IconDownload /> Download resume
+            </a>
+          </div>
+          <dl className='hero-stats'>
+            {STATS.map(({ value, label }) => (
+              <div key={label}>
+                <dt>{value}</dt>
+                <dd>{label}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+        <a href='#about' className='hero-scroll' aria-label='Scroll to about'>
+          <IconArrowDown />
+        </a>
       </header>
 
-      <div id='lead'>
-        <div id='particles-js'></div>
-        <div id='lead-content'>
-          <h1>Ammar Khurshid</h1>
-          <h2>Fullstack Web Developer</h2>
-          <a href='/Ammar_Resume.pdf' className='btn-rounded-white'>
-            Download Resume
-          </a>
-        </div>
-
-        <div id='lead-overlay'></div>
-
-        <div id='lead-down'>
-          <a href='#about' style={{ color: 'white' }}>
-            <span>
-              <i className='fa fa-chevron-down' aria-hidden='true'></i>
-            </span>
-          </a>
-        </div>
-      </div>
-
-      <div id='about'>
-        <div className='container'>
-          <br />
-          <div className='row'>
-            <div className='col-md-4'>
-              <h2 className='heading'>About Me</h2>
-            </div>
-            <div className='col-md-8'>
-              <Image
-                src='/images/ammar.jpg'
-                alt='Me'
-                style={{
-                  marginBottom: '10px',
-                  borderRadius: '80%',
-                }}
-                width={200}
-                height={200}
-                priority
-              />
-              <p style={{ textAlign: 'left' }}>
-                Hi, I&apos;m <b>Ammar</b> 👨🏻‍💻
-                <br />
-                I&apos;m an MSc Computing Science graduate from the <a href='https://www.gla.ac.uk/'>University of Glasgow</a>
-                <i className='fa fa-graduation-cap' aria-hidden='true'></i>.
-                <br />
-                <code>A frontend web developer by profession with proficiency in ReactJs ❤.</code>
-                <br />
-                <br />
-                Hit me up for anything and everything tech related, or if you want to see me talk about why Samwise Gamgee is the real hero, not Frodo Baggins.
-              </p>
+      <main>
+        <section className='section' id='about'>
+          <div className='container'>
+            <SectionHeading eyebrow='01 — About' title='A little about me' />
+            <div className='about-layout'>
+              <div className='about-photo reveal'>
+                <Image src='/images/ammar.jpg' alt='Ammar Khurshid' width={280} height={280} priority />
+              </div>
+              <div className='about-text reveal'>
+                <p>
+                  Hi, I&apos;m <strong>Ammar</strong> 👨🏻‍💻 — an MSc Computing Science graduate from the{' '}
+                  <a href='https://www.gla.ac.uk/' target='_blank' rel='noopener noreferrer'>
+                    University of Glasgow
+                  </a>
+                  .
+                </p>
+                <p>
+                  A frontend developer by profession with a soft spot for <code>React</code>, design systems and making analytics data actually useful.
+                </p>
+                <p>Hit me up for anything and everything tech related, or if you want to hear why Samwise Gamgee is the real hero, not Frodo Baggins.</p>
+                <ul className='about-tags'>
+                  {ABOUT_TAGS.map((tag) => (
+                    <li key={tag}>{tag}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </section>
 
-      <div id='experience' className='background-alt'>
-        <h2 className='heading'>Experience</h2>
-        <Experiences />
-      </div>
+        <section className='section' id='experience'>
+          <div className='container'>
+            <SectionHeading eyebrow='02 — Experience' title='Where I’ve worked' sub='Five years across product, consulting and analytics engineering.' />
+            <Timeline />
+          </div>
+        </section>
 
-      <div id='education'>
-        <h2 className='heading'>Education</h2>
-        {Education.map((education, i) => (
-          <EduBlock key={i} education={education} />
-        ))}
-      </div>
+        <section className='section' id='projects'>
+          <div className='container'>
+            <SectionHeading eyebrow='03 — Projects' title='Things I have built' sub='Side projects, coursework and experiments that escaped the localhost.' />
+            <div className='projects-grid'>
+              {Projects.map((project) => (
+                <Project key={project.title} project={project} />
+              ))}
+            </div>
+          </div>
+        </section>
 
-      <div id='projects' className='background-alt'>
-        <h2 className='heading'>Projects</h2>
+        <section className='section' id='education'>
+          <div className='container'>
+            <SectionHeading eyebrow='04 — Education' title='Where I studied' />
+            <div className='edu-grid'>
+              {Education.map((education) => (
+                <div className='edu-card card reveal' key={education.university}>
+                  <span className='edu-date'>{education.time}</span>
+                  <h3>{education.university}</h3>
+                  <p>{education.degree}</p>
+                  <span className='edu-grade'>{education.grade}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className='section' id='skills'>
+          <div className='container'>
+            <SectionHeading eyebrow='05 — Toolkit' title='Skills & technologies' />
+            <div className='skills-grid'>
+              {SKILL_GROUPS.map((group) => (
+                <div className='skill-group card reveal' key={group.title}>
+                  <h3>{group.title}</h3>
+                  <ul>
+                    {group.items.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className='section' id='contact'>
+          <div className='container'>
+            <div className='contact-layout'>
+              <div className='reveal'>
+                <SectionHeading
+                  eyebrow='06 — Contact'
+                  title='Get in touch'
+                  sub='Got a role, a project or a strong Lord of the Rings opinion? Drop me a line.'
+                />
+                <ul className='contact-links'>
+                  {SOCIALS.map(({ label, href, Icon }) => (
+                    <li key={label}>
+                      <a href={href} target='_blank' rel='noopener noreferrer'>
+                        <Icon /> {label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <form className='contact-form card reveal' method='POST' onSubmit={handleSubmission}>
+                <input type='hidden' name='_subject' value='Contact request from personal website' />
+                <label>
+                  Email
+                  <input type='email' name='_replyto' placeholder='you@example.com' required />
+                </label>
+                <label>
+                  Message
+                  <textarea name='message' placeholder='Tell me about it…' required />
+                </label>
+                {RECAPTCHA_SITE_KEY ? <Recaptcha className='captcha' ref={recaptcha} sitekey={RECAPTCHA_SITE_KEY} /> : null}
+                <button type='submit' className='btn btn-primary'>
+                  Send message
+                </button>
+                {status ? <p className='form-status'>{status}</p> : null}
+              </form>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer className='footer'>
         <div className='container'>
-          <div className='row'>
-            {Projects.map((project, i) => (
-              <Project key={i} project={project} />
+          <p>© {year} Ammar Khurshid — built with Next.js</p>
+          <ul className='social'>
+            {SOCIALS.map(({ label, href, Icon }) => (
+              <li key={label}>
+                <a href={href} target='_blank' rel='noopener noreferrer' aria-label={label}>
+                  <Icon />
+                </a>
+              </li>
             ))}
-          </div>
-        </div>
-      </div>
-
-      <div id='skills'>
-        <h2 className='heading'>Skills</h2>
-        <ul>
-          <li>Web Development</li>
-          <li>Adobe Analytics</li>
-          <li>UI/UX Design</li>
-        </ul>
-        <br />
-        <h2 className='heading'>Languages</h2>
-        <ul>
-          <li>JavaScript</li>
-          <li>Python</li>
-          <li>Java</li>
-          <li>HTML</li>
-          <li>CSS</li>
-          <li>SQL</li>
-        </ul>
-        <br />
-
-        <h2 className='heading'>Technologies</h2>
-        <ul>
-          <li>React</li>
-          <li>React Native</li>
-          <li>Angular</li>
-          <li>GatsbyJs</li>
-          <li>Node.js</li>
-          <li>Express</li>
-          <li>Raspberry Pi</li>
-          <li>Postman</li>
-          <li>Figma</li>
-          <li>Bootstrap</li>
-          <li>Material UI</li>
-        </ul>
-      </div>
-
-      <div className='optional-section background-alt' id='certificate'>
-        <h2 className='heading'>Certifications</h2>
-        <div className='optional-section-block'>
-          <ul>
-            <li>Full-Stack Web Development with React Specialization</li>
-            <li>Introduction to User Experience Design on Coursera</li>
-            <li>Introduction to Self-Driving Cars by University of Toronto on Coursera.</li>
-            <li>The Arduino Platform and C Programming by University of California, Irvine on Coursera.</li>
-            <li>Data Analysis with Python by IBM on Coursera.</li>
-            <li>Build an E-commerce Dashboard with Figma on Coursera</li>
-            <li>Server-side Development with NodeJS, Express and MongoDB on Coursera</li>
-            <li>Creating a Personal Site with Gatsby</li>
           </ul>
         </div>
-      </div>
-
-      <div id='contact'>
-        <h2>Get in Touch</h2>
-        <br />
-        <div id='contact-form'>
-          <form id='form' method='POST' onSubmit={handleSubmission}>
-            <input type='hidden' name='_subject' value='Contact request from personal website' />
-            <input type='email' name='_replyto' placeholder='Your email' required />
-            <textarea name='message' placeholder='Your message' required />
-            <Recaptcha className='captcha' ref={recaptcha} sitekey={RECAPTCHA_SITE_KEY} />
-            <button type='submit'>Send</button>
-          </form>
-        </div>
-      </div>
-
-      <footer>
-        <div className='container'>
-          <div className='row'>
-            <div className='col-sm-5 copyright'>
-              <p id='copyright'>{copyright}</p>
-            </div>
-            <div className='col-sm-2 top'>
-              <a href='#about' style={{ color: 'white' }}>
-                <span id='to-top'>
-                  <i className='fa fa-chevron-up' aria-hidden='true'></i>
-                </span>
-              </a>
-            </div>
-            <div className='col-sm-5 social'>
-              <ul>
-                <li>
-                  <a href='https://github.com/zorgonide' target='_blank' rel='noopener noreferrer'>
-                    <i className='fa fa-github' aria-hidden='true'></i>
-                  </a>
-                </li>
-                <li>
-                  <a href='https://www.linkedin.com/in/ammar-khurshid-757140177/' target='_blank' rel='noopener noreferrer'>
-                    <i className='fa fa-linkedin' aria-hidden='true'></i>
-                  </a>
-                </li>
-                <li>
-                  <a href='https://www.instagram.com/ammar.khurshid/' target='_blank' rel='noopener noreferrer'>
-                    <i className='fa fa-instagram' aria-hidden='true'></i>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
       </footer>
-    </div>
+    </>
   );
 }
