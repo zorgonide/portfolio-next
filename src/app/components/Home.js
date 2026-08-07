@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import Recaptcha from './Recaptcha';
-import { RECAPTCHA_SITE_KEY, FORM_ENDPOINT } from './formConfig';
+// import Recaptcha from './Recaptcha';
+// import { RECAPTCHA_SITE_KEY, FORM_ENDPOINT } from './formConfig';
 import {
   IconArrowDown,
   IconArrowUpRight,
@@ -32,7 +32,7 @@ const SOCIALS = [
 ];
 
 const STATS = [
-  { value: '4+', label: 'Years corporate coding' },
+  { value: '5+', label: 'Years corporate coding' },
   { value: '4', label: 'Companies' },
   { value: 'MSc CS', label: 'Distinction' },
 ];
@@ -203,12 +203,12 @@ export default function Home() {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
-    const captchaValue = recaptcha.current?.getValue();
-
-    if (RECAPTCHA_SITE_KEY && !captchaValue) {
-      setStatus('Please complete the captcha first.');
-      return;
-    }
+    // reCAPTCHA temporarily disabled — see commented usage below.
+    // const captchaValue = recaptcha.current?.getValue();
+    // if (RECAPTCHA_SITE_KEY && !captchaValue) {
+    //   setStatus('Please complete the captcha first.');
+    //   return;
+    // }
 
     setStatus('Sending…');
     fetch(FORM_ENDPOINT, {
@@ -472,7 +472,7 @@ export default function Home() {
                   Message
                   <textarea name='message' placeholder='Tell me about it…' required />
                 </label>
-                {RECAPTCHA_SITE_KEY ? <Recaptcha className='captcha' ref={recaptcha} sitekey={RECAPTCHA_SITE_KEY} /> : null}
+                {/* {RECAPTCHA_SITE_KEY ? <Recaptcha className='captcha' ref={recaptcha} sitekey={RECAPTCHA_SITE_KEY} /> : null} */}
                 <button type='submit' className='btn btn-primary'>
                   Send message
                 </button>

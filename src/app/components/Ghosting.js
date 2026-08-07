@@ -14,12 +14,12 @@ export default function Ghosting() {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
-    const captchaValue = recaptcha.current?.getValue();
-
-    if (RECAPTCHA_SITE_KEY && !captchaValue) {
-      setStatus('Please complete the captcha first.');
-      return;
-    }
+    // reCAPTCHA temporarily disabled — see commented usage below.
+    // const captchaValue = recaptcha.current?.getValue();
+    // if (RECAPTCHA_SITE_KEY && !captchaValue) {
+    //   setStatus('Please complete the captcha first.');
+    //   return;
+    // }
 
     setStatus('Sending…');
     fetch(GHOSTING_FORM_ENDPOINT, {
@@ -61,7 +61,7 @@ export default function Ghosting() {
             <textarea name='message' placeholder='Your answer' />
           </label>
 
-          {RECAPTCHA_SITE_KEY ? <Recaptcha className='captcha' ref={recaptcha} sitekey={RECAPTCHA_SITE_KEY} /> : null}
+          {/* {RECAPTCHA_SITE_KEY ? <Recaptcha className='captcha' ref={recaptcha} sitekey={RECAPTCHA_SITE_KEY} /> : null} */}
 
           <button type='submit' className='btn btn-primary'>
             Send message
