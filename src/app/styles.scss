@@ -1059,6 +1059,15 @@ img {
     justify-content: center;
 }
 
+.ghosting-illustration {
+    width: 88px;
+    height: auto;
+    margin: 0 auto;
+    display: block;
+    filter: drop-shadow(0 12px 22px rgba(45, 212, 191, 0.35));
+    animation: bob 3s ease-in-out infinite;
+}
+
 .ghosting-heading {
     display: grid;
     gap: 10px;
