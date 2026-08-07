@@ -820,9 +820,13 @@ img {
     display: flex;
     justify-content: center;
 
-    // clip the 1px white border the reCAPTCHA iframe renders around the dark widget
+    // The reCAPTCHA dark theme draws its own #525252 border inside a cross-origin iframe we can't
+    // restyle. Padding the wrapper with a matching dark-gray tone stops it looking like a stray edge
+    // against our near-black background.
     & > div {
-        border-radius: 4px;
+        padding: 6px;
+        border-radius: 8px;
+        background: #2f3136;
         overflow: hidden;
     }
 }
