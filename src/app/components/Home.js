@@ -370,11 +370,7 @@ export default function Home() {
               </div>
               <div className='about-text reveal'>
                 <p>
-                  Hi, I&apos;m <strong>Ammar</strong> 👨🏻‍💻 — an MSc Computing Science graduate from the{' '}
-                  <a href='https://www.gla.ac.uk/' target='_blank' rel='noopener noreferrer'>
-                    University of Glasgow
-                  </a>
-                  .
+                  Hi, I&apos;m <strong>Ammar</strong>
                 </p>
                 <p>
                   A frontend developer by profession with a soft spot for <code>React</code>, design systems and making analytics data actually useful.
