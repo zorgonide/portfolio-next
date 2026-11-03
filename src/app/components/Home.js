@@ -1,5 +1,4 @@
 import ContactForm from './ContactForm';
-import PreviewLink from './PreviewLink';
 
 const SOCIALS = [
   { label: 'GitHub', href: 'https://github.com/zorgonide' },
@@ -106,7 +105,7 @@ export default function Home() {
               <span className='muted'>{job.time}</span>
               <div>
                 <p>
-                  {job.role} at {job.url ? <PreviewLink href={job.url}>{job.company}</PreviewLink> : job.company}
+                  {job.role} at {job.url ? <a href={job.url} target='_blank' rel='noopener noreferrer'>{job.company}</a> : job.company}
                 </p>
                 <p className='muted'>{job.description}</p>
               </div>
