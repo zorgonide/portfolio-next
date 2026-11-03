@@ -1,4 +1,5 @@
 import ContactForm from './ContactForm';
+import PreviewLink from './PreviewLink';
 
 const SOCIALS = [
   { label: 'GitHub', href: 'https://github.com/zorgonide' },
@@ -50,24 +51,28 @@ const Education = [
 const Experience = [
   {
     company: "Sainsbury's",
+    url: 'https://www.sainsburys.co.uk',
     time: 'Aug 2024 — Present',
     role: 'Software Engineer',
     description: "Product analytics across Sainsbury's, Argos, Habitat and TU Clothing.",
   },
   {
     company: 'Reply',
+    url: 'https://www.reply.com',
     time: 'Sep 2023 — Aug 2024',
     role: 'Consultant',
     description: 'Analytics developer working with Adobe Experience Cloud.',
   },
   {
     company: 'Adobe',
+    url: 'https://www.adobe.com',
     time: 'Feb 2022 — Aug 2022',
     role: 'Senior Technical Product Consultant',
     description: 'Helped clients implement, optimise and troubleshoot web implementations for Adobe Analytics.',
   },
   {
     company: 'ICICI Lombard',
+    url: 'https://www.icicilombard.com',
     time: 'Feb 2021 — Feb 2022',
     role: 'Developer',
     description: "Built Angular web apps for health insurance at India's largest private insurer.",
@@ -101,7 +106,7 @@ export default function Home() {
               <span className='muted'>{job.time}</span>
               <div>
                 <p>
-                  {job.role} at {job.company}
+                  {job.role} at {job.url ? <PreviewLink href={job.url}>{job.company}</PreviewLink> : job.company}
                 </p>
                 <p className='muted'>{job.description}</p>
               </div>
